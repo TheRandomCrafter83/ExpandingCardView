@@ -3,6 +3,20 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\willi\\keystores\\ExpandableCardView.jks')
+            storePassword 'abc123'
+            keyAlias 'key0'
+            keyPassword 'abc123'
+        }
+        release {
+            storeFile file('C:\\Users\\willi\\keystores\\ExpandableCardView.jks')
+            storePassword 'abc123'
+            keyAlias 'key0'
+            keyPassword 'abc123'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "31.0.0"
 
@@ -20,6 +34,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
