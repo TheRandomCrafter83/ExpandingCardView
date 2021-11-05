@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
                 collapse(recyclerView);
                 button.setText(R.string.show_more);
             }
-            recyclerView.invalidate();
         });
     }
 
