@@ -7,14 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -30,19 +33,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("expanded")) {
+                expanded = savedInstanceState.getBoolean("expanded");
+            }
+        }
         recyclerView = findViewById(R.id.recycler);
         initRecycler();
         button = findViewById(R.id.button_expand);
-        button.setOnClickListener(v -> {
-            expanded = !expanded;
-            if (expanded) {
-                expand(recyclerView);
-                button.setText(R.string.show_less);
-            } else {
-                collapse(recyclerView);
-                button.setText(R.string.show_more);
-            }
-        });
+        button.setOnClickListener(v -> setExpanded(!expanded));
+        setExpanded(expanded);
+    }
+
+    private void setExpanded(boolean expanded){
+        this.expanded = expanded;
+        if (expanded) {
+            expand(recyclerView);
+            button.setText(R.string.show_less);
+            setButtonDrawable(R.drawable.show_less);
+        } else {
+            collapse(recyclerView);
+            button.setText(R.string.show_more);
+            setButtonDrawable(R.drawable.show_more);
+        }
+    }
+
+    private void setButtonDrawable(int imageResource){
+        button.setCompoundDrawablesWithIntrinsicBounds(0,0,imageResource,0);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("expanded",expanded);
+        super.onSaveInstanceState(outState);
     }
 
     private int pixelsToDp() {
@@ -54,12 +77,14 @@ public class MainActivity extends AppCompatActivity {
         RecyclerAdapter recyclerAdapter = new RecyclerAdapter(bitmaps);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerAdapter.notifyDataSetChanged();
+        GridLayoutManager gridLayoutManager = (GridLayoutManager)recyclerView.getLayoutManager();
+
     }
 
     //Just some functions for testing and creating dummy data
     private ArrayList<Bitmap> getDummyList(Context context) {
         ArrayList<Bitmap> ret = new ArrayList<>();
-        for (int i = 1; i < 16; i++) {
+        for (int i = 1; i <31; i++) {
             Bitmap bmp = drawableToBitmap(getDrawable(context, "image" + i));
             ret.add(bmp);
         }
@@ -82,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         return bitmap;
     }
 //-------------------------------------------------->
+
 
     public void collapse(final View view) {
         view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
