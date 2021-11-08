@@ -3,4 +3,8 @@
     <string name="show_less">Show Less</string>
     <string name="show_more">Show More</string>
     <string name="dummyimage">DummyImage</string>
+    <string name="eat_what_makes_you_happy">Eat What makes you happy</string>
+    <string name="restaurant_name_cuisine_or_a_dish">Restaurant name, cuisine, or a dish...</string>
+    <string name="categories">Categories</string>
+    <string name="see_restaurants_around_you">See Restaurants around you</string>
 </resources>
